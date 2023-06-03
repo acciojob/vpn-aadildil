@@ -5,35 +5,31 @@ import javax.persistence.*;
 
 @Entity
 public class Country {
-
-    public Country() {
-    }
-
-    public Country( CountryName countryName, String code) {
-        this.countryName = countryName;
-        this.code = code;
-
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
+    @Enumerated(EnumType.STRING)
     private CountryName countryName;
+
     private String code;
+
 
     @ManyToOne
     @JoinColumn
     private ServiceProvider serviceProvider;
 
-    @OneToOne(mappedBy = "country",cascade = CascadeType.ALL)
+
+    @OneToOne
     private User user;
 
+    public Country() {
+    }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

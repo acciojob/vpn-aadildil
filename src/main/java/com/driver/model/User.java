@@ -25,7 +25,7 @@ public class User {
     private String password;
     private String originalIp;
     private String maskedIp;
-    private boolean connected;
+    private Boolean connected;
 
     @OneToOne
     @JoinColumn

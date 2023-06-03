@@ -32,20 +32,59 @@ public class UserServiceImpl implements UserService {
     public User register(String username, String password, String countryName) throws Exception{
 
 
-        if(adminService.isCountryPresent(countryName)==false)
+//        if(adminService.isCountryPresent(countryName)==false)
+//            throw new Exception("Country not found");
+//
+//        Country country=adminService.createCountry(countryName);//country
+//        User user=new User(username,password,country);//set user
+//        user.setConnected(false);
+//        country.setUser(user);
+//        countryRepository3.save(country);
+//        int userId=country.getUser().getId();
+//
+//        String countryCode=country.getCode();
+//        String userIp=countryCode+"."+userId;
+//        country.getUser().setOriginalIp(userIp);
+//        countryRepository3.save(country);
+//        return user;
+        User user = new User();
+        if(countryName.equalsIgnoreCase("IND") || countryName.equalsIgnoreCase("USA")|| countryName.equalsIgnoreCase("JPN")|| countryName.equalsIgnoreCase("AUS")|| countryName.equalsIgnoreCase("CHI")) {
+            user.setUsername(username);
+            user.setPassword(password);
+
+            Country country = new Country(); //linking
+            if (countryName.equalsIgnoreCase("IND")) {
+                country.setCountryName(CountryName.IND);
+                country.setCode(CountryName.IND.toCode());
+            }
+            if (countryName.equalsIgnoreCase("USA")) {
+                country.setCountryName(CountryName.USA);
+                country.setCode(CountryName.USA.toCode());
+            }
+            if (countryName.equalsIgnoreCase("JPN")) {
+                country.setCountryName(CountryName.JPN);
+                country.setCode(CountryName.JPN.toCode());
+            }
+            if (countryName.equalsIgnoreCase("CHI")) {
+                country.setCountryName(CountryName.CHI);
+                country.setCode(CountryName.CHI.toCode());
+            }
+            if (countryName.equalsIgnoreCase("AUA")) {
+                country.setCountryName(CountryName.AUS);
+                country.setCode(CountryName.AUS.toCode());
+            }
+
+            country.setUser(user);
+            user.setConnected(false);
+            user.setOriginalCountry(country);
+            String code = country.getCode() + "." + userRepository3.save(user).getId();
+            user.setOriginalIp(code);
+
+            userRepository3.save(user);
+        }
+        else{
             throw new Exception("Country not found");
-
-        Country country=adminService.createCountry(countryName);//country
-        User user=new User(username,password,country);//set user
-        user.setConnected(false);
-        country.setUser(user);
-        countryRepository3.save(country);
-        int userId=country.getUser().getId();
-
-        String countryCode=country.getCode();
-        String userIp=countryCode+"."+userId;
-        country.getUser().setOriginalIp(userIp);
-        countryRepository3.save(country);
+        }
         return user;
 
 

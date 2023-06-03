@@ -27,7 +27,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin register(String username, String password) {
 
-        Admin admin=new Admin(username,password);
+        Admin admin=new Admin();
+        admin.setUsername(username);
+        admin.setPassword(password);
+
+
         adminRepository1.save(admin);
         return  admin;
     }
@@ -36,8 +40,7 @@ public class AdminServiceImpl implements AdminService {
     public Admin addServiceProvider(int adminId, String providerName) {
 
         Optional<Admin> adminOptional=adminRepository1.findById(adminId);
-//        if(!adminOptional.isPresent())
-//        throw new Exception("admn not found");
+
         Admin admin=adminOptional.get();
 
         ServiceProvider serviceProvider=new ServiceProvider();
@@ -73,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    public Boolean isCountryPresent(String countryName) {
+    public Boolean isCountryPresent(String countryName) {////////////////
 
         if(countryName.equalsIgnoreCase("IND") || countryName.equalsIgnoreCase("USA") || countryName.equalsIgnoreCase("JPN") || countryName.equalsIgnoreCase("CHI") || countryName.equalsIgnoreCase("AUS"))
            return true;

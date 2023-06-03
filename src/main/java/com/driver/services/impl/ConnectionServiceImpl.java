@@ -161,7 +161,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         Country senderCountry=sender.getOriginalCountry();
         String senderCountryName=senderCountry.getCountryName().name();
         String receiverCountryName="";
-        if(!receiver.getConnected())
+        if(receiver.getConnected()==false)
             receiverCountryName=receiver.getOriginalCountry().getCountryName().name();
         else
         {

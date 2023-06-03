@@ -59,7 +59,7 @@ public class AdminServiceImpl implements AdminService {
 
 
 
-        if(!isCountryPresent(countryName))
+        if(isCountryPresent(countryName)==false)
             throw new Exception("Country not found");
         Country country=createCountry(countryName);
         country.setServiceProvider(serviceProvider);

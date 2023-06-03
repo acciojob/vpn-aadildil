@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public User register(String username, String password, String countryName) throws Exception{
 
 
-        if(!adminService.isCountryPresent(countryName))
+        if(adminService.isCountryPresent(countryName)==false)
             throw new Exception("Country not found");
 
         Country country=adminService.createCountry(countryName);//country

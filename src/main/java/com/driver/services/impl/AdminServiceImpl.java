@@ -40,7 +40,8 @@ public class AdminServiceImpl implements AdminService {
 //        throw new Exception("admn not found");
         Admin admin=adminOptional.get();
 
-        ServiceProvider serviceProvider=new ServiceProvider(providerName);
+        ServiceProvider serviceProvider=new ServiceProvider();
+        serviceProvider.setName(providerName);
         serviceProvider.setAdmin(admin);
         admin.getServiceProviders().add(serviceProvider);
         adminRepository1.save(admin);
@@ -50,20 +51,21 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ServiceProvider addCountry(int serviceProviderId, String countryname) throws Exception{
+    public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception{
 
         Optional<ServiceProvider> optionalServiceProvider=serviceProviderRepository1.findById(serviceProviderId);
         ServiceProvider serviceProvider=optionalServiceProvider.get();
 
 
-        String countryName1=countryname.toUpperCase();
-        if(!isCountryPresent(countryName1))
+
+
+        if(!isCountryPresent(countryName))
             throw new Exception("Country not found");
-        CountryName countryName=CountryName.valueOf(countryName1);//enum countryName
-        Country country=new Country(countryName,countryName.toCode());//creating country model
+        Country country=createCountry(countryName);
         country.setServiceProvider(serviceProvider);
         serviceProvider.getCountryList().add(country);
         serviceProviderRepository1.save(serviceProvider);
+
         return serviceProvider;
 
 
@@ -71,17 +73,38 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    public boolean isCountryPresent(String countryname) {
+    public boolean isCountryPresent(String countryName) {
 
-        boolean isPresent=false;
-        try {
-            CountryName country = CountryName.valueOf(countryname);
-            isPresent = true;
-            return true;
-        } catch (IllegalArgumentException e) {
-            // Exception will be thrown if the input string is not present in the enum
-            return false;
+        if(countryName.equalsIgnoreCase("IND") || countryName.equalsIgnoreCase("USA") || countryName.equalsIgnoreCase("JPN") || countryName.equalsIgnoreCase("CHI") || countryName.equalsIgnoreCase("AUS"))
+           return true;
+      return false;
+    }
+
+    public Country createCountry(String countryName)
+    {
+        Country country=new Country();
+
+        if(countryName.equalsIgnoreCase("IND")){
+            country.setCountryName(CountryName.IND);
+            country.setCode(CountryName.IND.toCode());
         }
+        if(countryName.equalsIgnoreCase("USA")){
+            country.setCountryName(CountryName.USA);
+            country.setCode(CountryName.USA.toCode());
+        }
+        if(countryName.equalsIgnoreCase("JPN")){
+            country.setCountryName(CountryName.JPN);
+            country.setCode(CountryName.JPN.toCode());
+        }
+        if(countryName.equalsIgnoreCase("CHI")){
+            country.setCountryName(CountryName.CHI);
+            country.setCode(CountryName.CHI.toCode());
+        }
+        if(countryName.equalsIgnoreCase("AUS")){
+            country.setCountryName(CountryName.AUS);
+            country.setCode(CountryName.AUS.toCode());
+        }
+        return country;
     }
 
 }

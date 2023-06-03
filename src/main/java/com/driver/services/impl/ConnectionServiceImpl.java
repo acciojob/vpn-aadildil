@@ -26,14 +26,17 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User connect(int userId, String countryName) throws Exception{
 
+
         //getting user by ID;
         Optional<User> optionalUser =userRepository2.findById(userId);
         //checking country name exist or not
         countryName=countryName.toUpperCase();
-        if(!adminService.isCountryPresent(countryName))
-            throw new Exception("Country not found");
+        Country country=adminService.createCountry(countryName);
         CountryName countryName1=CountryName.valueOf(countryName);
         User user=optionalUser.get();
+        if(user==null)
+            return null;
+
         if(user.getConnected()||countryName1.equals(user.getOriginalCountry().getCountryName()))
             return user;
 

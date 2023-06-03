@@ -23,18 +23,21 @@ public class UserServiceImpl implements UserService {
     @Autowired
     CountryRepository countryRepository3;
 
+    @Autowired
+    AdminServiceImpl adminService;
+
 
 
     @Override
     public User register(String username, String password, String countryName) throws Exception{
 
-         countryName=countryName.toUpperCase();
-        if(!isCountryPresent(countryName))
-            throw new Exception("Country not found");
-        CountryName countryName1=CountryName.valueOf(countryName);//enum countryName
-        Country country=new Country(countryName1,countryName1.toCode());//creating country model
 
-        User user=new User(username,password,country);
+        if(!adminService.isCountryPresent(countryName))
+            throw new Exception("Country not found");
+
+        Country country=adminService.createCountry(countryName);//country
+        User user=new User(username,password,country);//set user
+        user.setConnected(false);
         country.setUser(user);
         countryRepository3.save(country);
         int userId=country.getUser().getId();
@@ -53,11 +56,8 @@ public class UserServiceImpl implements UserService {
     public User subscribe(Integer userId, Integer serviceProviderId) throws Exception {
 
         Optional<User> optionalUser=userRepository3.findById(userId);
-        if(!optionalUser.isPresent())
-            throw new Exception("User not found");
         Optional<ServiceProvider> optionalServiceProvider=serviceProviderRepository3.findById(serviceProviderId);
-        if(!optionalServiceProvider.isPresent())
-            throw new Exception("Service provider not found");
+
 
         User user=optionalUser.get();//user
         ServiceProvider serviceProvider=optionalServiceProvider.get();//service provider
@@ -70,15 +70,5 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private boolean isCountryPresent(String countryname) {
 
-
-        try {
-            CountryName country = CountryName.valueOf(countryname);
-            return true;
-        } catch (IllegalArgumentException e) {
-            // Exception will be thrown if the input string is not present in the enum
-            return false;
-        }
-    }
 }
